@@ -23,7 +23,7 @@ class EMA:
         self.HOST = os.getenv("HOST")
         self.DB = os.getenv("DB")
         self.USER = os.getenv("USER")
-        self.PWD = os.getenv("PWD")
+        self.PWD = os.getenv("PASSW")
 
         self.connection = None
         self.cursor = None
