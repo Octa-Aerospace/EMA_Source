@@ -62,7 +62,7 @@ class EMA:
         self.connection.commit()
         print(f"Data inserted into db: {data['temperature']} ºC, {data['humidity']} %")
 
-        # print(data["pm10"])
+        print(f"PM10 sensor: {data['pm10']}")
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(f"TEMP: {data['temperature']} C", 1)
         self.lcd.lcd_display_string(f"HUM: {data['humidity']} %", 2)
