@@ -1,7 +1,5 @@
 import sys
-#
 from components import SDL_Pi_HDC1080
-
 
 # Setting main path to HDC1080
 class HDC:
@@ -11,12 +9,6 @@ class HDC:
 	# Getting temperature
 	def HDCtemp(self, roundto) -> float:
 		temperature = round(self.hdc1080.readTemperature(), roundto)
-
-		if self.connection.is_connected():
-			self.cursor = self.connection.cursor()
-			self.cursor.execute(f"INSERT INTO HDC1080_TEMP (DATETIME, DATA) VALUES (NOW(), {temperature})")
-			self.connection.commit()
-			print("Temperature uploaded to database successfully")
 
 		return temperature
 

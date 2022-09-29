@@ -20,10 +20,10 @@ class EMA:
         sleep(5)
         self.lcd.lcd_clear()
 
-        self.HOST = os.getenv("HOST")
-        self.DB = os.getenv("DB")
-        self.USER = os.getenv("USER")
-        self.PASSW = os.getenv("PASSW")
+        self.HOST = os.getenv("MYSQL_HOST")
+        self.DB = os.getenv("MYSQL_DB")
+        self.USER = os.getenv("MYSQL_USER")
+        self.PASSW = os.getenv("MYSQL_PWD")
 
         # Connecting to database
         self.connection = mysql.connector.connect(
