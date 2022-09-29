@@ -1,6 +1,6 @@
 # Estación de Monitoreo Ambiental (EMA)
 
-## Dashboard views from Grafana
+## Dashboard [views from Grafana](https://cxrloskenobi.grafana.net/goto/iDH3kIVVk?orgId=1)
 
 ![Dashboard](./assets/ss.png)
 
