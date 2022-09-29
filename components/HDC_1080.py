@@ -16,37 +16,41 @@ PWD = os.getenv("PWD")
 class HDC:
 	def __init__(self) -> None:
 		sys.path.append('./SDL_Pi_HDC1080_Python3')
+		print("HOST: ", HOST)
+		print("DB: ", DB)
+		print("USER: ", USER)
+		print("PWD: ", PWD)
+		
 		self.hdc1080 = SDL_Pi_HDC1080.SDL_Pi_HDC1080()
-
-
-	# Getting temperature
-	def HDCtemp(self, roundto) -> float:
-		temperature = round(self.hdc1080.readTemperature(), roundto)
-
 		try:
-			connection = mysql.connector.connect(
+			self.connection = mysql.connector.connect(
 				host=HOST,
 				database=DB,
 				user=USER,
 				password=PWD
 			)
 
-			if connection.is_connected():
-				cursor = connection.cursor()
-				cursor.execute(f"INSERT INTO HDC1080_TEMP (DATETIME, DATA) VALUES (NOW(), {temperature})")
-				connection.commit()
-				print("Temperature uploaded to database successfully")
-
 		except Error as e:
 			print("Error while connecting to MySQL", e)
 
 		finally:
-			if (connection.is_connected()):
-				cursor.close()
-				connection.close()
+			if (self.connection.is_connected()):
+				self.cursor.close()
+				self.connection.close()
 				print("MySQL connection is closed\n")
 
-			return temperature
+
+	# Getting temperature
+	def HDCtemp(self, roundto) -> float:
+		temperature = round(self.hdc1080.readTemperature(), roundto)
+
+		if self.connection.is_connected():
+			self.cursor = self.connection.cursor()
+			self.cursor.execute(f"INSERT INTO HDC1080_TEMP (DATETIME, DATA) VALUES (NOW(), {temperature})")
+			self.connection.commit()
+			print("Temperature uploaded to database successfully")
+
+		return temperature
 
 	# Getting humidity
 	def HDChum(self, roundto) -> float:
