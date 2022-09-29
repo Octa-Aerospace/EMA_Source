@@ -1,44 +1,12 @@
-import os, sys
-import mysql.connector
-from mysql.connector import Error
-from dotenv import load_dotenv
-load_dotenv()
+import sys
 #
 from components import SDL_Pi_HDC1080
 
-
-HOST = os.getenv("HOST")
-DB = os.getenv("DB")
-USER = os.getenv("USER")
-PWD = os.getenv("PWD")
 
 # Setting main path to HDC1080
 class HDC:
 	def __init__(self) -> None:
 		sys.path.append('./SDL_Pi_HDC1080_Python3')
-		print("HOST: ", HOST)
-		print("DB: ", DB)
-		print("USER: ", USER)
-		print("PWD: ", PWD)
-		
-		self.hdc1080 = SDL_Pi_HDC1080.SDL_Pi_HDC1080()
-		try:
-			self.connection = mysql.connector.connect(
-				host=HOST,
-				database=DB,
-				user=USER,
-				password=PWD
-			)
-
-		except Error as e:
-			print("Error while connecting to MySQL", e)
-
-		finally:
-			if (self.connection.is_connected()):
-				self.cursor.close()
-				self.connection.close()
-				print("MySQL connection is closed\n")
-
 
 	# Getting temperature
 	def HDCtemp(self, roundto) -> float:
