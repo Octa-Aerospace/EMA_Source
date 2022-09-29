@@ -54,7 +54,7 @@ class EMA:
             'humidity': self.hdc1080.HDChum(2),
             'pm10': self.sharp_pm10.read()
         }
-        
+
         self.cursor.execute(f"""
             INSERT INTO HDC1080 (datetime, temperature, relative_humidity)
             VALUES (NOW(), {data['temperature']}, {data['humidity']})
