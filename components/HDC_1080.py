@@ -16,6 +16,7 @@ class HDC:
 	# Getting humidity
 	def HDChum(self, roundto) -> float:
 		humidity = round(self.hdc1080.readHumidity(), roundto)
+
 		return humidity
 
 if __name__ == "__main__":

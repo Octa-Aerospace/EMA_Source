@@ -1,11 +1,11 @@
 import os
-from time import sleep
 import mysql.connector
+from time import sleep
 from dotenv import load_dotenv
 load_dotenv()
 #
-from components.HDC_1080 import HDC
 from components.SHARP_PM10 import SHARP
+from components.HDC_1080 import HDC
 from components import i2c_lcd
 
 class EMA:
@@ -17,7 +17,7 @@ class EMA:
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(" - - EMA - - ", 1)
         self.lcd.lcd_display_string("OCTA AEROSPACE", 2)
-        # sleep(5)
+        sleep(5)
         self.lcd.lcd_clear()
 
         self.HOST = os.getenv("MYSQL_HOST")
@@ -37,7 +37,6 @@ class EMA:
             self.cursor.execute("SELECT VERSION()")
             self.record = self.cursor.fetchone()
             print(f"Connected to database: {self.record}")
-
 
     # def read(self) -> str:
     #     message = \
@@ -70,6 +69,7 @@ class EMA:
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(f"PM10: {data['pm10']} ug/m3", 1)
         sleep(5)
+
         return data
 
     def exit(self) -> None:
@@ -84,4 +84,3 @@ class EMA:
 
         sleep(2)
         self.lcd.lcd_clear()
-

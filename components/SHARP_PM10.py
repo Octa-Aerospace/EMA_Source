@@ -2,15 +2,14 @@ import os
 import time
 import serial
 
-
 class SHARP:
     def __init__(self):
         os.system('sudo chmod 777 /dev/ttyS0')
         self.serialPort = serial.Serial(port = "/dev/ttyS0", baudrate=9600,
                            bytesize=8, timeout=1, stopbits=serial.STOPBITS_ONE)
 
-
         self.serialString = "" # Used to hold data coming over UART
+
 
     def read(self) -> str:
         os.system("sudo chmod 77 /dev/ttyS0")

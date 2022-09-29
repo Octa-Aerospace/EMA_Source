@@ -1,4 +1,4 @@
-import os
+# import os
 from components.EMA import EMA
 
 if __name__ == "__main__":
@@ -8,6 +8,7 @@ if __name__ == "__main__":
             ema.start()
         except KeyboardInterrupt:
             ema.exit()
+            print("\n")
             break
             # os.system("sudo poweroff")
 
