@@ -23,7 +23,7 @@ class EMA:
         self.HOST = os.getenv("HOST")
         self.DB = os.getenv("DB")
         self.USER = os.getenv("USER")
-        self.PWD = os.getenv("PASSW")
+        self.PASSW = os.getenv("PASSW")
 
         self.connection = None
         self.cursor = None
@@ -38,14 +38,19 @@ class EMA:
         return message 
 
     def start(self) -> dict:
-        print("PWD: ", self.PWD)
+        print("PASSW: ", self.PASSW)
         self.connection = mysql.connector.connect(
             host=self.HOST,
             database=self.DB,
             user=self.USER,
-            password=self.PWD
+            password=self.PASSW
         )
-        self.cursor = self.connection.cursor()
+        
+        if (self.connection.is_connected()):
+            self.cursor = self.connection.cursor()
+            self.cursor.execute("SELECT VERSION()")
+            record = self.cursor.fetchone()
+            print("Connected to MySQL database... MySQL Server version on ", record, "\n")
 
         data = {
             'temperature': self.hdc1080.HDCtemp(1),
