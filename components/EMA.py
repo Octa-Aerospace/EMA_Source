@@ -54,15 +54,15 @@ class EMA:
             'humidity': self.hdc1080.HDChum(2),
             'pm10': self.sharp_pm10.read()
         }
-        
+
         self.cursor.execute(f"""
             INSERT INTO HDC1080 (datetime, temperature, relative_humidity)
             VALUES (NOW(), {data['temperature']}, {data['humidity']})
         """)
+        self.cursor.execute(f"INSERT INTO SHARP (datetime, pm10) VALUES (NOW(), {data['pm10']})")
         self.connection.commit()
-        print(f"Data inserted into db: {data['temperature']} ºC, {data['humidity']} %")
+        print(f"Data inserted into db: {data['temperature']} ºC, {data['humidity']} %, {data['pm10']}")
 
-        print(f"PM10 sensor: {data['pm10']}")
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(f"TEMP: {data['temperature']} C", 1)
         self.lcd.lcd_display_string(f"HUM: {data['humidity']} %", 2)
