@@ -5,6 +5,7 @@ from components import SDL_Pi_HDC1080
 class HDC:
 	def __init__(self) -> None:
 		sys.path.append('./SDL_Pi_HDC1080_Python3')
+		self.hdc1080 = SDL_Pi_HDC1080.SDL_Pi_HDC1080()
 
 	# Getting temperature
 	def HDCtemp(self, roundto) -> float:
