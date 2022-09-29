@@ -17,7 +17,7 @@ class EMA:
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(" - - EMA - - ", 1)
         self.lcd.lcd_display_string("OCTA AEROSPACE", 2)
-        sleep(5)
+        # sleep(5)
         self.lcd.lcd_clear()
 
         self.HOST = os.getenv("MYSQL_HOST")
@@ -50,13 +50,17 @@ class EMA:
 
     def start(self) -> dict:
         data = {
-            'temperature': self.hdc1080.HDCtemp(1),
-            'humidity': self.hdc1080.HDChum(1),
+            'temperature': self.hdc1080.HDCtemp(2),
+            'humidity': self.hdc1080.HDChum(2),
             'pm10': self.sharp_pm10.read()
         }
-
-        self.cursor.execute(f'INSERT INTO "HDC1080-TEMP" (DATETIME, DATA) VALUES (NOW(), {data["temperature"]})')
-        print("[*] Temperature data inserted.")
+        
+        self.cursor.execute(f"""
+            INSERT INTO HDC1080 (datetime, temperature, relative_humidity)
+            VALUES (NOW(), {data['temperature']}, {data['humidity']})
+        """)
+        self.connection.commit()
+        print(f"Data inserted into db: {data['temperature']} ºC, {data['humidity']} %")
 
         # print(data["pm10"])
         self.lcd.lcd_clear()
