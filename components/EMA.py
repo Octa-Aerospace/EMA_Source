@@ -25,7 +25,6 @@ class EMA:
         self.USER = os.getenv("MYSQL_USER")
         self.PASSW = os.getenv("MYSQL_PWD")
 
-        # Connecting to database
         self.connection = mysql.connector.connect(
             host=self.HOST,
             database=self.DB,
@@ -40,14 +39,14 @@ class EMA:
             print(f"Connected to database: {self.record}")
 
 
-    def read(self) -> str:
-        message = \
-            f"\n[ ! ] Temperatura: {self.hdc1080.HDCtemp(2)} ºC\n" \
-            f"[ ! ] Humedad: {self.hdc1080.HDChum(2)} %\n" \
-            f"[ ! ] PM10: {self.sharp_pm10.read()}\n"
-        self.lcd.lcd_display_string(message)
+    # def read(self) -> str:
+    #     message = \
+    #         f"\n[ ! ] Temperatura: {self.hdc1080.HDCtemp(2)} ºC\n" \
+    #         f"[ ! ] Humedad: {self.hdc1080.HDChum(2)} %\n" \
+    #         f"[ ! ] PM10: {self.sharp_pm10.read()}\n"
+    #     self.lcd.lcd_display_string(message)
 
-        return message 
+    #     return message 
 
     def start(self) -> dict:
         data = {
@@ -56,7 +55,10 @@ class EMA:
             'pm10': self.sharp_pm10.read()
         }
 
-        print(data["pm10"])
+        self.cursor.execute(f'INSERT INTO "HDC1080-TEMP" (DATETIME, DATA) VALUES (NOW(), {data["temperature"]})')
+        print("[*] Temperature data inserted.")
+
+        # print(data["pm10"])
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(f"TEMP: {data['temperature']} C", 1)
         self.lcd.lcd_display_string(f"HUM: {data['humidity']} %", 2)
@@ -71,7 +73,7 @@ class EMA:
         self.lcd.lcd_display_string("APAGANDO EMA.", 1)
         self.lcd.lcd_display_string("REINICIO REQUERIDO", 2)
 
-        if self.connection.is_connected():
+        if (self.connection.is_connected()):
             self.cursor.close()
             self.connection.close()
             print("Database connection closed.")
