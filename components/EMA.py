@@ -25,8 +25,20 @@ class EMA:
         self.USER = os.getenv("USER")
         self.PASSW = os.getenv("PASSW")
 
-        self.connection = None
-        self.cursor = None
+        # Connecting to database
+        self.connection = mysql.connector.connect(
+            host=self.HOST,
+            database=self.DB,
+            user=self.USER,
+            password=self.PASSW
+        )
+
+        if self.connection.is_connected():
+            self.cursor = self.connection.cursor()
+            self.cursor.execute("SELECT VERSION()")
+            self.record = self.cursor.fetchone()
+            print(f"Connected to database: {self.record}")
+
 
     def read(self) -> str:
         message = \
@@ -38,20 +50,6 @@ class EMA:
         return message 
 
     def start(self) -> dict:
-        print("PASSW: ", self.PASSW)
-        self.connection = mysql.connector.connect(
-            host=self.HOST,
-            database=self.DB,
-            user=self.USER,
-            password=self.PASSW
-        )
-        
-        if (self.connection.is_connected()):
-            self.cursor = self.connection.cursor()
-            self.cursor.execute("SELECT VERSION()")
-            record = self.cursor.fetchone()
-            print("Connected to MySQL database... MySQL Server version on ", record, "\n")
-
         data = {
             'temperature': self.hdc1080.HDCtemp(1),
             'humidity': self.hdc1080.HDChum(1),
@@ -69,14 +67,15 @@ class EMA:
         return data
 
     def exit(self) -> None:
-        if (self.connection.is_connected()):
-            self.connection.close()
-            self.cursor.close()
-            print("MySQL connection is closed\n")
-
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string("APAGANDO EMA.", 1)
         self.lcd.lcd_display_string("REINICIO REQUERIDO", 2)
+
+        if self.connection.is_connected():
+            self.cursor.close()
+            self.connection.close()
+            print("Database connection closed.")
+
         sleep(2)
         self.lcd.lcd_clear()
 
