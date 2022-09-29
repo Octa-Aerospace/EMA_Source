@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "ema-source"
+version = "0.1.0"
+description = ""
+authors = ["OctaAerospace <dev@octaaerospace.com>"]
+readme = "README.md"
+packages = [{include = "ema_source"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+mysql-connector-python = "^8.0.28"
+"RPi.GPIO" = "^0.7.1"
+python-dotenv = "^0.21.0"
+smbus = "^1.1.post2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
