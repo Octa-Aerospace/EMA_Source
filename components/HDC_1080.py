@@ -18,10 +18,3 @@ class HDC:
 		humidity = round(self.hdc1080.readHumidity(), roundto)
 
 		return humidity
-
-if __name__ == "__main__":
-	hdc = HDC()
-	message = \
-		f"\n[ ! ] Temperatura: {hdc.HDCtemp(2)} ºC\n" \
-		f"[ ! ] Humedad: {hdc.HDChum(2)} %\n"
-	print(message)

@@ -3,16 +3,18 @@ import mysql.connector
 from time import sleep
 from dotenv import load_dotenv
 load_dotenv()
-#
+
 from components.SHARP_PM10 import SHARP
 from components.HDC_1080 import HDC
 from components import i2c_lcd
+from components import rgb
 
 class EMA:
     def __init__(self) -> None:
         self.hdc1080 = HDC()
         self.sharp_pm10 = SHARP()
         self.lcd = i2c_lcd.lcd()
+        self.rgb = rgb.RGB()
 
         self.lcd.lcd_clear()
         self.lcd.lcd_display_string(" - - EMA - - ", 1)
@@ -38,15 +40,6 @@ class EMA:
             self.record = self.cursor.fetchone()
             print(f"Connected to database: {self.record}")
 
-    # def read(self) -> str:
-    #     message = \
-    #         f"\n[ ! ] Temperatura: {self.hdc1080.HDCtemp(2)} ºC\n" \
-    #         f"[ ! ] Humedad: {self.hdc1080.HDChum(2)} %\n" \
-    #         f"[ ! ] PM10: {self.sharp_pm10.read()}\n"
-    #     self.lcd.lcd_display_string(message)
-
-    #     return message 
-
     def start(self) -> dict:
         data = {
             'temperature': self.hdc1080.HDCtemp(2),
@@ -70,6 +63,17 @@ class EMA:
         self.lcd.lcd_display_string(f"PM10: {data['pm10']} ug/m3", 1)
         sleep(5)
 
+        if data["pm10"] == None:
+            data["pm10"] = 0
+        self.rgb.purpleOff()
+        self.rgb.redOff()
+        self.rgb.greenOff()
+        if data["pm10"] <= 100 and data["pm10"] >= 70:
+            self.rgb.purpleOn()
+        elif data["pm10"] < 70 and data["pm10"] >= 40:
+            self.rgb.redOn()
+        elif data["pm10"] < 40 and data["pm10"] >= 0:
+            self.rgb.greenOn()
         return data
 
     def exit(self) -> None:

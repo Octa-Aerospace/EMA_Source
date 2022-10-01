@@ -229,11 +229,3 @@ class lcd:
 
         for char in string:
             self.lcd_write(ord(char), Rs)
-            # Could we use lcd_write_char?
-            # self.lcd_write_char(char, Rs)
-
-
-if __name__ == "__main__":
-    lcd = lcd()
-    lcd.lcd_display_string("OCTA AEROSPACE, A FAMILY-OWNED COMPANY", 1)
-    
