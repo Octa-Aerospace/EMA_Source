@@ -22,7 +22,7 @@ poetry install
 bash run.sh
 ```
 
-> 3.1 If bash run.sh doesn't work, try to run the following commands:
+> 3.1 In case bash run.sh doesn't work, try to install each package manually & run the following command:
 
 ```bash
 python3 main.py
